@@ -60,6 +60,13 @@ function initScanner() {
                 width: { min: 640 },
                 height: { min: 480 },
                 aspectRatio: { min: 1, max: 2 }
+            },
+            // 枠外の誤読を防ぐため解析領域を画面中央（ガイド枠内）に絞り込み
+            area: {
+                top: "25%",
+                right: "10%",
+                left: "10%",
+                bottom: "25%"
             }
         },
         locator: {
