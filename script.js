@@ -63,10 +63,10 @@ function initScanner() {
             },
             // Quagga純正の解析範囲設定（緑枠の幅75%×高さ45%に正確に対応）
             area: {
-                top: "27.5%",
+                top: "30.0%",
                 right: "12.5%",
                 left: "12.5%",
-                bottom: "27.5%"
+                bottom: "28.0%"
             }
         },
         locator: {
