@@ -60,6 +60,13 @@ function initScanner() {
                 width: { min: 640 },
                 height: { min: 480 },
                 aspectRatio: { min: 1, max: 2 }
+            },
+            // Quagga純正の解析範囲設定（緑枠の幅75%×高さ45%に正確に対応）
+            area: {
+                top: "27.5%",
+                right: "12.5%",
+                left: "12.5%",
+                bottom: "27.5%"
             }
         },
         locator: {
@@ -82,85 +89,11 @@ function initScanner() {
     });
 
     Quagga.onDetected((result) => {
-        // 画面上の緑枠（#scanner-guide）の内側にバーコードが収まっているか厳密判定
-        if (!isStrictlyInsideGuide(result)) return;
-
         const code = result.codeResult.code;
         if (code && code.length === 13) {
             onScanSuccess(code);
         }
     });
-}
-
-// 画面上の緑枠（ガイド枠）のDOM位置とカメラ映像の解像度から、
-// バーコードの検出位置が視覚的な緑枠内に収まっているかをリアルタイム計算
-function isStrictlyInsideGuide(result) {
-    if (!result) return false;
-
-    const videoElem = document.querySelector("#interactive video");
-    const guideElem = document.getElementById("scanner-guide");
-
-    if (!videoElem || !guideElem || !videoElem.videoWidth || !videoElem.videoHeight) {
-        return true;
-    }
-
-    const vWidth = videoElem.videoWidth;
-    const vHeight = videoElem.videoHeight;
-
-    const videoRect = videoElem.getBoundingClientRect();
-    const guideRect = guideElem.getBoundingClientRect();
-
-    const dWidth = videoRect.width;
-    const dHeight = videoRect.height;
-
-    if (dWidth === 0 || dHeight === 0) return true;
-
-    const aVideo = vWidth / vHeight;
-    const aDisp = dWidth / dHeight;
-
-    let scale = 1;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    if (aVideo > aDisp) {
-        // 横長映像が左右トリミングされている場合
-        scale = dHeight / vHeight;
-        offsetX = (dHeight * aVideo - dWidth) / 2;
-    } else {
-        // 縦長映像が上下トリミングされている場合
-        scale = dWidth / vWidth;
-        offsetY = (dWidth / aVideo - dHeight) / 2;
-    }
-
-    // カメラ解像度上の緑枠の領域座標（px）を算出
-    const guideLeft = (guideRect.left - videoRect.left + offsetX) / scale;
-    const guideRight = (guideRect.right - videoRect.left + offsetX) / scale;
-    const guideTop = (guideRect.top - videoRect.top + offsetY) / scale;
-    const guideBottom = (guideRect.bottom - videoRect.top + offsetY) / scale;
-
-    let hasValidPoints = false;
-
-    // スキャンライン（解読ライン）の座標判定
-    if (result.line && result.line.length > 0) {
-        hasValidPoints = true;
-        const lineInside = result.line.every(pt => 
-            pt.x >= guideLeft && pt.x <= guideRight &&
-            pt.y >= guideTop && pt.y <= guideBottom
-        );
-        if (!lineInside) return false;
-    }
-
-    // バウンディングボックス（四隅の外枠）の座標判定
-    if (result.box && result.box.length > 0) {
-        hasValidPoints = true;
-        const boxInside = result.box.every(([x, y]) => 
-            x >= guideLeft && x <= guideRight &&
-            y >= guideTop && y <= guideBottom
-        );
-        if (!boxInside) return false;
-    }
-
-    return hasValidPoints;
 }
 
 function onScanSuccess(code) {
