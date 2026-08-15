@@ -143,6 +143,10 @@ html, body {
     flex-grow: 1;
     text-align: left;
     word-break: break-all;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    pointer-events: none; /* 長押し・タップ発信を完全防止 */
 }
 
 /* ボタン共通 */
@@ -265,6 +269,9 @@ html, body {
     font-size: 0.85rem;
     color: #00ff66;
     line-height: 1.1;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 .saved-item-memo {
@@ -356,6 +363,8 @@ html, body {
     font-weight: bold;
     color: #00ff66;
     margin: 0 0 14px 0;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .modal-buttons {
