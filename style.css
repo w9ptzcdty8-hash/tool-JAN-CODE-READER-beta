@@ -323,32 +323,33 @@ html, body {
     opacity: 0.6;
 }
 
-/* MRS TOOLS リンクスタイル */
+/* MRS TOOLS リンクスタイル（控えめなモノトーンテキストリンク） */
 .footer-link-container {
     width: 100%;
     margin-top: 24px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    text-align: center;
 }
 
 .btn-footer-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-height: 44px;
-    background-color: #1a1a1a;
-    color: #60a5fa;
-    border: 1px solid #2563eb;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: bold;
-    transition: background-color 0.2s, transform 0.1s;
+    display: inline-block;
+    color: #888888;
+    font-size: 0.85rem;
+    font-weight: normal;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    border-radius: 0;
+    min-height: auto;
+    padding: 4px 8px;
+    transition: color 0.2s;
 }
 
-.btn-footer-link:active {
-    background-color: #252525;
-    transform: scale(0.97);
+.btn-footer-link:active,
+.btn-footer-link:hover {
+    color: #cccccc;
+    background-color: transparent;
+    transform: none;
 }
 
 /* モーダル */
