@@ -17,25 +17,48 @@
 
         <!-- スキャナー表示領域 -->
         <div class="scanner-container">
-            <div id="interactive" class="viewport">
-                <!-- QuaggaJSが内部に<video>を自動生成します -->
-            </div>
-            <!-- ガイド枠 -->
+            <div id="interactive" class="viewport"></div>
             <div class="scanner-guide" id="scanner-guide"></div>
         </div>
 
-        <!-- 読み取り結果・ステータス -->
+        <!-- 読み取り結果・操作ボタン -->
         <div class="result-container">
             <p id="status-text" class="status-text">スキャン中…</p>
-            <p id="jan-code-display" class="jan-code-display">- - - - - - - - - - - - -</p>
+            <div class="jan-code-row">
+                <span id="jan-code-display" class="jan-code-display">- - - - - - - - - - - - -</span>
+                <button id="btn-copy" class="btn-sub" disabled>コピー</button>
+                <button id="btn-save" class="btn-sub" disabled>保存</button>
+            </div>
         </div>
 
-        <!-- 検索アクションボタン -->
+        <!-- 検索ボタン -->
         <div class="button-group">
-            <button id="btn-amazon" class="btn btn-amazon" disabled>Amazonで検索</button>
-            <button id="btn-rakuten" class="btn btn-rakuten" disabled>楽天で検索</button>
+            <button id="btn-search-main" class="btn btn-main" disabled>検索</button>
         </div>
+
+        <!-- 保存リストエリア -->
+        <section class="saved-section">
+            <h2>保存リスト</h2>
+            <div id="saved-list" class="saved-list">
+                <!-- 保存アイテムが動的に追加されます -->
+            </div>
+        </section>
     </main>
+
+    <!-- 検索先選択モーダル -->
+    <div id="search-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>検索先を選択</h3>
+            <p id="modal-jan-code" class="modal-code"></p>
+            <div class="modal-buttons">
+                <button class="btn btn-search-option btn-google" data-site="google">Googleで検索</button>
+                <button class="btn btn-search-option btn-amazon" data-site="amazon">AMAZONで検索</button>
+                <button class="btn btn-search-option btn-rakuten" data-site="rakuten">楽天で検索</button>
+                <button class="btn btn-search-option btn-mercari" data-site="mercari">メルカリで検索</button>
+            </div>
+            <button id="btn-close-modal" class="btn-close">キャンセル</button>
+        </div>
+    </div>
 
     <!-- 固定広告枠 -->
     <div class="ad-banner">
