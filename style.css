@@ -32,7 +32,7 @@ html, body {
     min-height: 100vh;
     margin: 0 auto;
     padding: 16px;
-    padding-bottom: calc(var(--ad-height) + env(safe-area-inset-bottom) + 16px);
+    padding-bottom: calc(var(--ad-height) + env(safe-area-inset-bottom) + 20px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,7 +41,7 @@ html, body {
 .header {
     width: 100%;
     text-align: center;
-    padding: 8px 0;
+    padding: 6px 0;
 }
 
 .header h1 {
@@ -55,14 +55,14 @@ html, body {
 .scanner-container {
     position: relative;
     width: 100%;
-    height: 280px;
+    height: 220px;
     background-color: #111111;
     border-radius: 12px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 6px;
 }
 
 .viewport {
@@ -92,7 +92,6 @@ html, body {
     transition: border-color 0.3s ease;
 }
 
-/* 成功時のアニメーション */
 .scanner-guide.success {
     animation: success-pulse 0.6s ease-in-out forwards;
 }
@@ -112,67 +111,255 @@ html, body {
     }
 }
 
-/* ステータスと結果表示 */
+/* ステータスと表示領域 */
 .result-container {
     width: 100%;
     text-align: center;
-    margin: 20px 0;
+    margin: 14px 0 10px 0;
 }
 
 .status-text {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: #aaaaaa;
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
+}
+
+.jan-code-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background-color: #1a1a1a;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #333333;
 }
 
 .jan-code-display {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    letter-spacing: 2px;
-    margin: 0;
+    letter-spacing: 1px;
     color: #ffffff;
-    min-height: 2.2rem;
+    flex-grow: 1;
+    text-align: left;
+    word-break: break-all;
 }
 
-/* ボタンエリア */
-.button-group {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
+/* ボタン共通 */
 .btn {
-    width: 100%;
-    min-height: 52px;
+    min-height: 48px;
     border: none;
-    border-radius: 10px;
-    font-size: 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
     font-weight: bold;
     color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     transition: opacity 0.2s, transform 0.1s;
 }
 
 .btn:active:not(:disabled) {
-    transform: scale(0.98);
+    transform: scale(0.97);
 }
 
 .btn:disabled {
     background-color: #333333 !important;
-    color: #777777;
+    color: #777777 !important;
     cursor: not-allowed;
     opacity: 0.6;
 }
 
-.btn-amazon {
+.btn-sub {
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-sub:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.button-group {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.btn-main {
+    width: 100%;
+    min-height: 48px;
+    font-size: 1.05rem;
+    background-color: #2563eb;
+}
+
+/* 保存リスト */
+.saved-section {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.saved-section h2 {
+    font-size: 0.95rem;
+    color: #cccccc;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid #333333;
+    padding-bottom: 4px;
+}
+
+.saved-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.saved-item {
+    background-color: #1a1a1a;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.saved-item-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.saved-item-code {
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: #00ff66;
+}
+
+.saved-item-memo {
+    width: 100%;
+    background-color: #111111;
+    border: 1px solid #444444;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+.saved-item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 58px;
+}
+
+.btn-icon-sub {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-icon-sub.btn-danger {
+    background-color: #7f1d1d;
+    border-color: #991b1b;
+    color: #fca5a5;
+}
+
+/* モーダル */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 360px;
+    padding: 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid #444444;
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.05rem;
+}
+
+.modal-code {
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #00ff66;
+    margin: 0 0 14px 0;
+}
+
+.modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.btn-search-option {
+    min-height: 44px;
+    font-size: 0.95rem;
+}
+
+.btn-search-option.btn-google {
+    background-color: #4285f4;
+}
+
+.btn-search-option.btn-amazon {
     background-color: #ff9900;
 }
 
-.btn-rakuten {
+.btn-search-option.btn-rakuten {
     background-color: #bf0000;
+}
+
+.btn-search-option.btn-mercari {
+    background-color: #ff0211;
+}
+
+.btn-close {
+    width: 100%;
+    padding: 8px;
+    background-color: transparent;
+    border: 1px solid #555555;
+    color: #aaaaaa;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
 }
 
 /* 固定広告枠 */
