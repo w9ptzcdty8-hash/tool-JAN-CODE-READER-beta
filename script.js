@@ -61,12 +61,12 @@ function initScanner() {
                 height: { min: 480 },
                 aspectRatio: { min: 1, max: 2 }
             },
-            // 枠外の誤読を防ぐため解析領域を画面中央（ガイド枠内）に絞り込み
+            // 解析エリアを緑枠（幅75%×高さ45%）の内側に完全制限
             area: {
-                top: "25%",
-                right: "10%",
-                left: "10%",
-                bottom: "25%"
+                top: "30%",
+                right: "15%",
+                left: "15%",
+                bottom: "30%"
             }
         },
         locator: {
@@ -89,11 +89,33 @@ function initScanner() {
     });
 
     Quagga.onDetected((result) => {
+        // 検出されたバーコード座標が緑枠内に完全に収まっているか判定
+        if (!isStrictlyInsideGuide(result)) return;
+
         const code = result.codeResult.code;
         if (code && code.length === 13) {
             onScanSuccess(code);
         }
     });
+}
+
+// 検出されたバーコードの位置がガイド枠の内側にあるか厳密チェック
+function isStrictlyInsideGuide(result) {
+    if (!result || !result.box) return true;
+
+    const canvas = Quagga.canvas.dom.image;
+    if (!canvas) return true;
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // 緑枠の内側（15%〜85%, 30%〜70%）の相対座標
+    const minX = width * 0.15;
+    const maxX = width * 0.85;
+    const minY = height * 0.30;
+    const maxY = height * 0.70;
+
+    return result.box.every(([x, y]) => x >= minX && x <= maxX && y >= minY && y <= maxY);
 }
 
 function onScanSuccess(code) {
@@ -306,7 +328,7 @@ function initEventListeners() {
 
     btnSave.addEventListener("click", () => {
         if (!currentJanCode) return;
-        
+
         const exists = savedItems.some(item => item.code === currentJanCode);
         if (!exists) {
             savedItems.unshift({
