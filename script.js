@@ -34,7 +34,6 @@ function saveSavedItems() {
     }
 }
 
-// カメラを停止させない画面上の非同期通知
 function showToast(message) {
     const toast = document.getElementById("toast");
     if (!toast) return;
@@ -100,6 +99,7 @@ function onScanSuccess(code) {
     const guideBox = document.getElementById("scanner-guide");
     const btnCopy = document.getElementById("btn-copy");
     const btnSave = document.getElementById("btn-save");
+    const btnReset = document.getElementById("btn-reset");
     const btnSearchMain = document.getElementById("btn-search-main");
 
     statusText.textContent = "読み取り成功";
@@ -107,6 +107,7 @@ function onScanSuccess(code) {
 
     btnCopy.disabled = false;
     btnSave.disabled = false;
+    btnReset.disabled = false;
     btnSearchMain.disabled = false;
 
     guideBox.classList.remove("success");
@@ -116,6 +117,28 @@ function onScanSuccess(code) {
     if ("vibrate" in navigator) {
         navigator.vibrate(200);
     }
+}
+
+function resetScanState() {
+    currentJanCode = "";
+
+    const statusText = document.getElementById("status-text");
+    const janDisplay = document.getElementById("jan-code-display");
+    const guideBox = document.getElementById("scanner-guide");
+    const btnCopy = document.getElementById("btn-copy");
+    const btnSave = document.getElementById("btn-save");
+    const btnReset = document.getElementById("btn-reset");
+    const btnSearchMain = document.getElementById("btn-search-main");
+
+    statusText.textContent = "スキャン中…";
+    janDisplay.textContent = "- - - - - - - - - - - - -";
+
+    btnCopy.disabled = true;
+    btnSave.disabled = true;
+    btnReset.disabled = true;
+    btnSearchMain.disabled = true;
+
+    guideBox.classList.remove("success");
 }
 
 function copyToClipboard(text) {
@@ -263,6 +286,7 @@ function renderSavedList() {
 function initEventListeners() {
     const btnCopy = document.getElementById("btn-copy");
     const btnSave = document.getElementById("btn-save");
+    const btnReset = document.getElementById("btn-reset");
     const btnSearchMain = document.getElementById("btn-search-main");
     const btnCloseModal = document.getElementById("btn-close-modal");
     const modalOptions = document.querySelectorAll(".btn-search-option");
@@ -289,6 +313,11 @@ function initEventListeners() {
         } else {
             showToast("すでに保存されています");
         }
+    });
+
+    btnReset.addEventListener("click", () => {
+        resetScanState();
+        showToast("リセットしました");
     });
 
     btnSearchMain.addEventListener("click", () => {
