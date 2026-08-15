@@ -5,6 +5,7 @@
 let currentJanCode = "";
 let targetSearchCode = "";
 let savedItems = [];
+let toastTimer = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     loadSavedItems();
@@ -12,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initEventListeners();
 });
 
-// ローカルストレージから保存リストを取得
 function loadSavedItems() {
     try {
         const stored = localStorage.getItem("jan_reader_saved");
@@ -26,13 +26,26 @@ function loadSavedItems() {
     renderSavedList();
 }
 
-// 保存リストをストレージに保存
 function saveSavedItems() {
     try {
         localStorage.setItem("jan_reader_saved", JSON.stringify(savedItems));
     } catch (e) {
         console.error("Failed to save items:", e);
     }
+}
+
+// カメラを停止させない画面上の非同期通知
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toast.classList.add("hidden");
+    }, 1800);
 }
 
 function initScanner() {
@@ -108,7 +121,7 @@ function onScanSuccess(code) {
 function copyToClipboard(text) {
     if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text).then(() => {
-            alert("コピーしました: " + text);
+            showToast("コピーしました: " + text);
         }).catch(() => {
             fallbackCopyTextToClipboard(text);
         });
@@ -127,9 +140,9 @@ function fallbackCopyTextToClipboard(text) {
     textArea.select();
     try {
         document.execCommand('copy');
-        alert("コピーしました: " + text);
+        showToast("コピーしました: " + text);
     } catch (err) {
-        alert("コピーに失敗しました");
+        showToast("コピーに失敗しました");
     }
     document.body.removeChild(textArea);
 }
@@ -226,12 +239,14 @@ function renderSavedList() {
         });
 
         const deleteBtn = document.createElement("button");
-        deleteBtn.className = "btn-icon-sub btn-danger";
-        deleteBtn.textContent = "削除";
+        deleteBtn.className = "btn-delete-x";
+        deleteBtn.textContent = "✕";
+        deleteBtn.title = "削除";
         deleteBtn.addEventListener("click", () => {
             savedItems.splice(index, 1);
             saveSavedItems();
             renderSavedList();
+            showToast("削除しました");
         });
 
         actionsEl.appendChild(searchBtn);
@@ -270,9 +285,9 @@ function initEventListeners() {
             });
             saveSavedItems();
             renderSavedList();
-            alert("保存リストに追加しました");
+            showToast("保存リストに追加しました");
         } else {
-            alert("このコードはすでに保存されています");
+            showToast("すでに保存されています");
         }
     });
 
